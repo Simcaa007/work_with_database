@@ -17,19 +17,32 @@
     }
     
     if(isset($_POST['zmenit'])){
+        
+        $name = trim($_POST['name']);
+        $author = trim($_POST['author']);
+        $genre = $_POST['genre'];
+        $year = (int)$_POST['year'];
+        $available = isset($_POST['available']) ? 1 : 0;
 
-        $change = [
-            'name' => $_POST['name'],
-            'author' => $_POST['author'],
-            'genre' => $_POST['genre'],
-            'year_of_publication' => $_POST['year'],
-            'info' => isset($_POST['available']) ? 1 : 0
-        ];
-
-        Db::update('databaze', $change, 'WHERE id = ?', $id );
+        if (!empty($name) && !empty($author) && $year >= 1000 && $year <= date('Y')) {
             
-        header("Location: index.php"); 
-        exit;
+            $change = [
+                'name' => $name,
+                'author' => $author,
+                'genre' => $genre,
+                'year_of_publication' => $year,
+                'info' => $available
+            ];
+
+            Db::update('databaze', $change, 'WHERE id = ?', $id );
+            
+            header("Location: index.php"); 
+            exit;
+
+        } else {
+            // Význam: Pokud validace selže, můžeme vypsat chybu (nebo prostě neuložit).
+            $error = "Prosím, vyplňte všechna pole správně.";
+        }
     }
 
 

@@ -7,16 +7,26 @@
 
 
     if(isset($_POST["vyt"])){
-        Db::insert("databaze", [
-            "name" => $_POST['name'],
-            "author" => $_POST['author'],
-            "genre" => $_POST['genre'],
-            "year_of_publication" => $_POST['year'],
-            "info" => $_POST['available'], // is_availablews
-        ]);
 
-        header("Location: /databaze/index.php");
-        die();
+        $available = isset($_POST['available']) ? 1 : 0;
+
+        if (!empty($_POST['name']) && !empty($_POST['author']) && $_POST['genre'] !== "0") {
+
+            Db::insert("databaze", [
+                "name" => $_POST['name'],
+                "author" => $_POST['author'],
+                "genre" => $_POST['genre'],
+                "year_of_publication" => $_POST['year'],
+                "info" => $available
+            ]);
+
+            header("Location: /databaze/index.php");
+            die();
+
+            
+        } else {
+            echo "Prosím vyplňte všechna pole správně.";
+        }
     }
 
 ?>
