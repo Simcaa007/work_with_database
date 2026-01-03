@@ -19,7 +19,9 @@ if(isset($_GET['submit'])){
 if(isset($_POST["vytvorit"])) {
 
 }
+¨
 
+//
 ?>
 
 <!DOCTYPE html>
