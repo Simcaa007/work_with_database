@@ -7,15 +7,31 @@
         die('Chybí ID');
     }
     
-    $id = (string) $_GET['id'];
+    $id = (int)$_GET['id'];
 
-    $book = Db::queryOne('SELECT * FROM databaze WHERE id = ?', [$id]);
-
-    /*
-    if(isset($_POST['zmenit'])){
-        Db::update("databaze", )
-    }*/
     
+
+    $book = Db::queryOne('SELECT * FROM databaze WHERE id = ?', $id);
+    if (!$book) {
+        die('Kniha nenalezena');
+    }
+    
+    if(isset($_POST['zmenit'])){
+
+        $change = [
+            'name' => $_POST['name'],
+            'author' => $_POST['author'],
+            'genre' => $_POST['genre'],
+            'year_of_publication' => $_POST['year'],
+            'info' => isset($_POST['available']) ? 1 : 0
+        ];
+
+        Db::update('databaze', $change, 'WHERE id = ?', $id );
+            
+        header("Location: index.php"); 
+        exit;
+    }
+
 
 ?>
 
@@ -42,7 +58,7 @@
         <option value="Horor" <?= $book['genre'] == 'Horor' ? 'selected' : '' ?>>Horor</option>
     </select>
 
-    <input type="text" name="year"
+    <input type="number" name="year" min="1000" max="<?= date('Y') ?>"
         value="<?= $book['year_of_publication'] ?>" pattern="\d{4}" required>
 
     <label>
